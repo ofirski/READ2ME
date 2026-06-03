@@ -2,11 +2,15 @@
   "name": "read2me",
   "displayName": "READ2ME",
   "description": "Read the active file aloud with offline Piper neural TTS — highlights the current sentence and word, with play/pause/stop, a speed stepper, and selectable voices.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "publisher": "ofirski",
+  "author": {
+    "name": "Ofir Kerker",
+    "url": "https://github.com/ofirski"
+  },
   "license": "MIT",
   "icon": "icon.png",
-  "homepage": "https://github.com/ofirski/READ2ME#readme",
+  "homepage": "https://read2me.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/ofirski/READ2ME.git",

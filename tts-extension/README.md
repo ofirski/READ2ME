@@ -85,6 +85,15 @@ boundaries are exact (anchored to each sentence's real audio duration) while the
 highlight always stays on the correct sentence and finishes exactly when the
 sentence's audio ends.
 
+## Credits
+
+Built by **Ofir Kerker** ([@ofirski](https://github.com/ofirski)) ·
+[Website](https://read2me.md) ·
+[X](https://x.com/ofirski_) ·
+[LinkedIn](https://www.linkedin.com/in/ofirski/)
+
+Speech synthesis by [Piper](https://github.com/OHF-Voice/piper1-gpl).
+
 ## License
 
 [MIT](LICENSE) © Ofir Kerker
