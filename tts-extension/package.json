@@ -1,9 +1,9 @@
 {
-  "name": "katalog-tts",
-  "displayName": "Katalog Read Aloud (Piper TTS)",
-  "description": "Read the active file aloud with offline Piper neural TTS, highlighting the current sentence and word, with play/pause/stop/speed controls and selectable voices.",
-  "version": "0.0.4",
-  "publisher": "katalog-local",
+  "name": "read2me",
+  "displayName": "READ2ME",
+  "description": "Read the active file aloud with offline Piper neural TTS — highlights the current sentence and word, with play/pause/stop, a speed stepper, and selectable voices.",
+  "version": "0.0.5",
+  "publisher": "read2me",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -17,87 +17,87 @@
   "contributes": {
     "commands": [
       {
-        "command": "katalogTts.play",
-        "title": "Katalog: Read aloud / resume"
+        "command": "read2me.play",
+        "title": "READ2ME: Read aloud / resume"
       },
       {
-        "command": "katalogTts.pause",
-        "title": "Katalog: Pause reading"
+        "command": "read2me.pause",
+        "title": "READ2ME: Pause reading"
       },
       {
-        "command": "katalogTts.stop",
-        "title": "Katalog: Stop reading"
+        "command": "read2me.stop",
+        "title": "READ2ME: Stop reading"
       },
       {
-        "command": "katalogTts.speedUp",
-        "title": "Katalog: Read faster"
+        "command": "read2me.speedUp",
+        "title": "READ2ME: Read faster"
       },
       {
-        "command": "katalogTts.speedDown",
-        "title": "Katalog: Read slower"
+        "command": "read2me.speedDown",
+        "title": "READ2ME: Read slower"
       },
       {
-        "command": "katalogTts.speedReset",
-        "title": "Katalog: Reset reading speed to 1x"
+        "command": "read2me.speedReset",
+        "title": "READ2ME: Reset reading speed to 1x"
       },
       {
-        "command": "katalogTts.selectVoice",
-        "title": "Katalog: Select voice"
+        "command": "read2me.selectVoice",
+        "title": "READ2ME: Select voice"
       }
     ],
     "keybindings": [
       {
-        "command": "katalogTts.play",
+        "command": "read2me.play",
         "key": "ctrl+cmd+r"
       },
       {
-        "command": "katalogTts.pause",
+        "command": "read2me.pause",
         "key": "ctrl+cmd+p"
       },
       {
-        "command": "katalogTts.stop",
+        "command": "read2me.stop",
         "key": "ctrl+cmd+s"
       }
     ],
     "configuration": {
-      "title": "Katalog TTS",
+      "title": "READ2ME",
       "properties": {
-        "katalogTts.pythonPath": {
+        "read2me.pythonPath": {
           "type": "string",
           "default": ".tts-venv/bin/python",
           "description": "Path to the Python interpreter (relative to the workspace folder, or absolute)."
         },
-        "katalogTts.serverScript": {
+        "read2me.serverScript": {
           "type": "string",
           "default": "tts_server.py",
           "description": "Path to tts_server.py (relative to the workspace folder, or absolute)."
         },
-        "katalogTts.voicesDir": {
+        "read2me.voicesDir": {
           "type": "string",
           "default": "tts-voices",
           "description": "Folder scanned for .onnx voices (relative to the workspace folder, or absolute)."
         },
-        "katalogTts.model": {
+        "read2me.model": {
           "type": "string",
           "default": "tts-voices/en_US-lessac-high.onnx",
-          "description": "Default Piper .onnx voice model (used until a voice is picked via 'Katalog: Select voice')."
+          "description": "Default Piper .onnx voice model (used until a voice is picked via 'READ2ME: Select voice')."
         },
-        "katalogTts.config": {
+        "read2me.config": {
           "type": "string",
           "default": "tts-voices/en_US-lessac-high.onnx.json",
           "description": "Default Piper .onnx.json config matching the default model."
         },
-        "katalogTts.rate": {
+        "read2me.rate": {
           "type": "number",
           "default": 1.0,
-          "description": "Base speech rate. 1.0 = natural; >1.0 = faster. The 2x button doubles this."
+          "description": "Base speech rate. 1.0 = natural; >1.0 = faster. The speed stepper multiplies this."
         },
-        "katalogTts.wordHighlightColor": {
+        "read2me.wordHighlightColor": {
           "type": "string",
           "default": "rgba(255,56,92,0.35)",
           "description": "Background color of the word currently being spoken."
         },
-        "katalogTts.sentenceHighlightColor": {
+        "read2me.sentenceHighlightColor": {
           "type": "string",
           "default": "rgba(255,56,92,0.12)",
           "description": "Background color of the sentence currently being spoken."

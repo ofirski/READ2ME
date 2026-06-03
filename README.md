@@ -25,12 +25,12 @@ python3 -m venv .tts-venv
 # 3. Build + install the Cursor extension
 cd tts-extension
 npx --yes @vscode/vsce package --no-dependencies --allow-missing-repository
-/Applications/Cursor.app/Contents/Resources/app/bin/cursor --install-extension katalog-tts-*.vsix
+/Applications/Cursor.app/Contents/Resources/app/bin/cursor --install-extension read2me-*.vsix
 ```
 
 The extension finds this project via absolute paths in your **Cursor user settings**
-(`katalogTts.pythonPath`, `katalogTts.serverScript`, `katalogTts.voicesDir`,
-`katalogTts.model`, `katalogTts.config`), so read-aloud works from any workspace,
+(`read2me.pythonPath`, `read2me.serverScript`, `read2me.voicesDir`,
+`read2me.model`, `read2me.config`), so read-aloud works from any workspace,
 not just this one. Update those settings if you move the repo.
 
 ## What's tracked vs. generated

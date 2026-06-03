@@ -1,4 +1,4 @@
-// Katalog Read Aloud (Piper TTS) — read the active editor aloud with offline
+// READ2ME (Piper TTS) — read the active editor aloud with offline
 // Piper synthesis, highlighting the current sentence and sweeping the current
 // word as it is spoken, with status-bar transport controls (play / pause / stop
 // / speed).
@@ -48,7 +48,7 @@ let pb = null;
 // --------------------------------------------------------------------------- //
 
 function resolvePaths() {
-  const cfg = vscode.workspace.getConfiguration("katalogTts");
+  const cfg = vscode.workspace.getConfiguration("read2me");
   const folders = vscode.workspace.workspaceFolders;
   const root = folders && folders.length ? folders[0].uri.fsPath : process.cwd();
   const abs = (val, def) => {
@@ -298,7 +298,7 @@ function effRate() {
 // --------------------------------------------------------------------------- //
 
 function voicesDir() {
-  const cfg = vscode.workspace.getConfiguration("katalogTts");
+  const cfg = vscode.workspace.getConfiguration("read2me");
   const folders = vscode.workspace.workspaceFolders;
   const root = folders && folders.length ? folders[0].uri.fsPath : process.cwd();
   const v = cfg.get("voicesDir") || "tts-voices";
@@ -342,7 +342,7 @@ function updateVoiceButton() {
 async function selectVoice() {
   const voices = listVoices();
   if (!voices.length) {
-    vscode.window.showWarningMessage(`Katalog TTS: no voices found in ${voicesDir()}.`);
+    vscode.window.showWarningMessage(`READ2ME: no voices found in ${voicesDir()}.`);
     return;
   }
   const cur = getActiveVoice();
@@ -357,7 +357,7 @@ async function selectVoice() {
   });
   if (!choice) return;
   activeVoice = choice.voice;
-  if (extContext) extContext.globalState.update("katalogTts.voice", activeVoice);
+  if (extContext) extContext.globalState.update("read2me.voice", activeVoice);
   updateVoiceButton();
 
   // Apply immediately: if reading, restart from the current sentence with the new voice.
@@ -414,7 +414,7 @@ function setSpeed(mul) {
   mul = Math.max(SPEED_MIN, Math.min(SPEED_MAX, mul));
   if (mul === speedMul) return;
   speedMul = mul;
-  if (extContext) extContext.globalState.update("katalogTts.speed", speedMul);
+  if (extContext) extContext.globalState.update("read2me.speed", speedMul);
   updateSpeedButtons();
   // Apply immediately: if reading, restart the current sentence at the new rate.
   if (pb && pb.status === "playing") {
@@ -557,7 +557,7 @@ function resolveTarget() {
     const editor = vscode.window.visibleTextEditors.find((e) => e.document === doc) || null;
     if (!editor) {
       vscode.window.setStatusBarMessage(
-        "Katalog TTS: reading the preview's source (audio only — open the source beside the preview for highlighting).",
+        "READ2ME: reading the preview's source (audio only — open the source beside the preview for highlighting).",
         6000
       );
     }
@@ -571,7 +571,7 @@ async function startFresh(opts) {
   const target = resolveTarget();
   if (!target) {
     vscode.window.showWarningMessage(
-      "Katalog TTS: no source document found. Open the Markdown file in an editor first."
+      "READ2ME: no source document found. Open the Markdown file in an editor first."
     );
     return;
   }
@@ -581,7 +581,7 @@ async function startFresh(opts) {
   const required = { python: paths.python, server: paths.server, model: voice.model, config: voice.config };
   for (const [key, p] of Object.entries(required)) {
     if (!fs.existsSync(p)) {
-      vscode.window.showErrorMessage(`Katalog TTS: ${key} not found at "${p}". Check Settings.`);
+      vscode.window.showErrorMessage(`READ2ME: ${key} not found at "${p}". Check Settings.`);
       return;
     }
   }
@@ -589,7 +589,7 @@ async function startFresh(opts) {
   const hasSel = target.editor && target.selection && !target.selection.isEmpty;
   const segments = buildSegments(target.doc, hasSel ? target.selection : undefined);
   if (!segments.length) {
-    vscode.window.showInformationMessage("Katalog TTS: nothing speakable to read.");
+    vscode.window.showInformationMessage("READ2ME: nothing speakable to read.");
     return;
   }
   let startIndex = hasSel ? 0 : indexForCursor(segments, target.doc, target.editor);
@@ -614,7 +614,7 @@ async function startFresh(opts) {
   try {
     await server.start();
   } catch (e) {
-    vscode.window.showErrorMessage("Katalog TTS: " + (e && e.message ? e.message : String(e)));
+    vscode.window.showErrorMessage("READ2ME: " + (e && e.message ? e.message : String(e)));
     doStop();
     return;
   }
@@ -693,31 +693,31 @@ function activate(context) {
 
   // Status-bar order (left→right): ▶/⏸  ⏹  −  1x  +  👤
   playItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 106);
-  playItem.command = "katalogTts.play";
+  playItem.command = "read2me.play";
   playItem.tooltip = "Read aloud from the cursor (or resume)";
   pauseItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 106);
   pauseItem.text = "$(debug-pause) Pause";
-  pauseItem.command = "katalogTts.pause";
+  pauseItem.command = "read2me.pause";
   pauseItem.tooltip = "Pause (keeps position)";
   stopItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 105);
   stopItem.text = "$(debug-stop) Stop";
-  stopItem.command = "katalogTts.stop";
+  stopItem.command = "read2me.stop";
   stopItem.tooltip = "Stop and reset to the start";
   speedDownItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 104);
-  speedDownItem.command = "katalogTts.speedDown";
+  speedDownItem.command = "read2me.speedDown";
   speedLabelItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 103);
-  speedLabelItem.command = "katalogTts.speedReset";
+  speedLabelItem.command = "read2me.speedReset";
   speedUpItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 102);
-  speedUpItem.command = "katalogTts.speedUp";
+  speedUpItem.command = "read2me.speedUp";
   voiceItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 101);
-  voiceItem.command = "katalogTts.selectVoice";
+  voiceItem.command = "read2me.selectVoice";
 
   extContext = context;
-  const savedVoice = context.globalState.get("katalogTts.voice");
+  const savedVoice = context.globalState.get("read2me.voice");
   if (savedVoice && savedVoice.model && fs.existsSync(savedVoice.model) && fs.existsSync(savedVoice.config)) {
     activeVoice = savedVoice;
   }
-  const savedSpeed = Number(context.globalState.get("katalogTts.speed"));
+  const savedSpeed = Number(context.globalState.get("read2me.speed"));
   if (savedSpeed && savedSpeed >= SPEED_MIN && savedSpeed <= SPEED_MAX) speedMul = savedSpeed;
 
   lastTextEditor = vscode.window.activeTextEditor || null;
@@ -738,15 +738,15 @@ function activate(context) {
     vscode.window.onDidChangeActiveTextEditor((e) => {
       if (e) lastTextEditor = e;
     }),
-    vscode.commands.registerCommand("katalogTts.play", () => doPlay()),
-    vscode.commands.registerCommand("katalogTts.pause", () => doPause()),
-    vscode.commands.registerCommand("katalogTts.stop", () => doStop()),
-    vscode.commands.registerCommand("katalogTts.speedUp", () => doSpeedUp()),
-    vscode.commands.registerCommand("katalogTts.speedDown", () => doSpeedDown()),
-    vscode.commands.registerCommand("katalogTts.speedReset", () => doSpeedReset()),
-    vscode.commands.registerCommand("katalogTts.selectVoice", () => selectVoice()),
+    vscode.commands.registerCommand("read2me.play", () => doPlay()),
+    vscode.commands.registerCommand("read2me.pause", () => doPause()),
+    vscode.commands.registerCommand("read2me.stop", () => doStop()),
+    vscode.commands.registerCommand("read2me.speedUp", () => doSpeedUp()),
+    vscode.commands.registerCommand("read2me.speedDown", () => doSpeedDown()),
+    vscode.commands.registerCommand("read2me.speedReset", () => doSpeedReset()),
+    vscode.commands.registerCommand("read2me.selectVoice", () => selectVoice()),
     // Back-compat alias for the original command/keybinding.
-    vscode.commands.registerCommand("katalogTts.readWithHighlight", () => doPlay())
+    vscode.commands.registerCommand("read2me.readWithHighlight", () => doPlay())
   );
 }
 
