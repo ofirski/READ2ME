@@ -1,8 +1,10 @@
 # READ2ME — read your editor aloud (offline neural TTS)
 
-[![VS Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/ofirski.read2me?label=Marketplace&color=6c4ff6)](https://marketplace.visualstudio.com/items?itemName=ofirski.read2me)
-[![Installs](https://img.shields.io/visual-studio-marketplace/i/ofirski.read2me?color=6c4ff6)](https://marketplace.visualstudio.com/items?itemName=ofirski.read2me)
-[![License: MIT](https://img.shields.io/badge/License-MIT-ff385c.svg)](LICENSE)
+[![VS Marketplace](https://img.shields.io/visual-studio-marketplace/v/ofirski.read2me?style=flat-square&logo=visualstudiocode&logoColor=white&label=VS%20Marketplace&color=6c4ff6)](https://marketplace.visualstudio.com/items?itemName=ofirski.read2me)
+[![VS Marketplace installs](https://img.shields.io/visual-studio-marketplace/i/ofirski.read2me?style=flat-square&logo=visualstudiocode&logoColor=white&label=installs&color=6c4ff6)](https://marketplace.visualstudio.com/items?itemName=ofirski.read2me)
+[![Open VSX](https://img.shields.io/open-vsx/v/ofirski/read2me?style=flat-square&logo=eclipseide&logoColor=white&label=Open%20VSX&color=ff385c)](https://open-vsx.org/extension/ofirski/read2me)
+[![Open VSX downloads](https://img.shields.io/open-vsx/dt/ofirski/read2me?style=flat-square&logo=eclipseide&logoColor=white&label=downloads&color=ff385c)](https://open-vsx.org/extension/ofirski/read2me)
+[![License: MIT](https://img.shields.io/badge/License-MIT-ff385c?style=flat-square)](LICENSE)
 
 Reads the active editor aloud using offline [Piper](https://github.com/OHF-Voice/piper1-gpl)
 neural text-to-speech, highlighting the current **sentence** and sweeping the current
@@ -16,12 +18,22 @@ neural text-to-speech, highlighting the current **sentence** and sweeping the cu
 
 ## Install
 
-**1. Install the extension** — from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=ofirski.read2me),
-the Extensions view (search "READ2ME"), or the CLI:
+**1. Install the extension** — READ2ME is published on both major registries, so it
+installs natively in VS Code and in Cursor / VSCodium / Windsurf alike:
 
-```bash
-code --install-extension ofirski.read2me
-```
+- **VS Code** — the [VS Marketplace](https://marketplace.visualstudio.com/items?itemName=ofirski.read2me),
+  the Extensions view (search "READ2ME"), or the CLI:
+
+  ```bash
+  code --install-extension ofirski.read2me
+  ```
+
+- **Cursor / VSCodium / Windsurf** — [Open VSX](https://open-vsx.org/extension/ofirski/read2me),
+  the in-app Extensions view (search "READ2ME"), or the CLI:
+
+  ```bash
+  cursor --install-extension ofirski.read2me
+  ```
 
 **2. Set up the offline voice backend** (one time):
 
