@@ -245,7 +245,7 @@ class SynthServer {
     return new Promise((res, rej) => {
       if (!this.proc || this.proc.killed) return rej(new Error("synth server not running"));
       const id = this.nextId++;
-      const out = path.join(os.tmpdir(), `katalog_tts_${process.pid}_${id}.wav`);
+      const out = path.join(os.tmpdir(), `read2me_tts_${process.pid}_${id}.wav`);
       this.pending.set(id, { res, rej, out });
       this.proc.stdin.write(JSON.stringify({ id, text, out, rate }) + "\n");
     });

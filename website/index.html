@@ -317,11 +317,24 @@
   .final .cta-row{justify-content:center}
 
   /* ---------- footer ---------- */
-  footer{border-top:1px solid var(--line);padding:40px 0;color:var(--faint);font-size:14px}
-  .foot-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  footer{border-top:1px solid var(--line);padding:44px 0;color:var(--faint);font-size:14px}
+  .foot-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
   .foot-inner a{color:var(--muted);text-decoration:none}
   .foot-inner a:hover{color:var(--text)}
   .foot-links{display:flex;gap:24px}
+
+  .built-by{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .built-by .by{font-size:14px;color:var(--faint)}
+  .built-by .by b{color:var(--text);font-weight:700}
+  .built-by .by .handle{color:var(--indigo-bright);font-family:var(--mono);font-size:13px}
+  .social{display:flex;gap:10px}
+  .social a{
+    width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+    border:1px solid var(--line-2);background:rgba(255,255,255,.03);color:var(--muted);
+    transition:transform .2s,color .2s,border-color .2s,background .2s;
+  }
+  .social a:hover{transform:translateY(-3px);color:var(--text);border-color:var(--indigo-bright);background:rgba(108,79,246,.14)}
+  .social svg{width:18px;height:18px;fill:currentColor}
 
   /* ---------- reveal on load/scroll ---------- */
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
@@ -361,10 +374,11 @@
       <a href="#how">How it works</a>
       <a href="#voices">Voices</a>
       <a href="#install">Install</a>
+      <a href="https://github.com/ofirski/READ2ME" target="_blank" rel="noopener">GitHub</a>
     </nav>
-    <a class="nav-cta" href="https://github.com/ofirski/READ2ME" target="_blank" rel="noopener">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5Z"/></svg>
-      GitHub
+    <a class="nav-cta" href="https://marketplace.visualstudio.com/items?itemName=ofirski.read2me" target="_blank" rel="noopener">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+      Install
     </a>
   </div>
 </header>
@@ -382,9 +396,9 @@
         every sentence and word as it speaks, so you can follow along, proofread by ear, or rest your eyes.
       </p>
       <div class="cta-row reveal" style="--d:.32s">
-        <a class="btn btn-primary" href="#install">
+        <a class="btn btn-primary" href="https://marketplace.visualstudio.com/items?itemName=ofirski.read2me" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
-          Get started
+          Install for VS Code
         </a>
         <a class="btn btn-ghost" href="https://github.com/ofirski/READ2ME" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5Z"/></svg>
@@ -523,7 +537,8 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="sec-kicker">Quick start</div>
-      <h2>Up and running in <em>three steps</em>.</h2>
+      <h2>Install, then add <em>voices</em>.</h2>
+      <p>Get the extension from the Marketplace, then run the one-time offline backend setup so it has neural voices to speak with.</p>
     </div>
     <div class="install-grid">
       <div class="term reveal">
@@ -535,17 +550,17 @@
             Copy
           </button>
         </div>
-<pre id="snippet"><span class="c"># 1 · Python env</span>
+<pre id="snippet"><span class="c"># 1 · Install the extension (or search "READ2ME" in the Extensions view)</span>
+<span class="p">$</span> <span class="k">code</span> --install-extension <span class="s">ofirski.read2me</span>
+
+<span class="c"># 2 · Set up the offline voice backend (one time)</span>
+<span class="p">$</span> <span class="k">git</span> clone https://github.com/ofirski/READ2ME.git
+<span class="p">$</span> <span class="k">cd</span> READ2ME
 <span class="p">$</span> <span class="k">python3</span> -m venv .tts-venv
 <span class="p">$</span> ./.tts-venv/bin/pip install -r tts-requirements.txt
 
-<span class="c"># 2 · Download the neural voices</span>
-<span class="p">$</span> <span class="k">./fetch-voices.sh</span>
-
-<span class="c"># 3 · Build + install the extension</span>
-<span class="p">$</span> <span class="k">cd</span> tts-extension
-<span class="p">$</span> npx --yes @vscode/vsce package --no-dependencies
-<span class="p">$</span> cursor --install-extension <span class="s">read2me-*.vsix</span></pre>
+<span class="c"># 3 · Download the neural voices, then set the read2me.* paths</span>
+<span class="p">$</span> <span class="k">./fetch-voices.sh</span></pre>
       </div>
 
       <div class="hk reveal">
@@ -568,9 +583,9 @@
     <h2 class="reveal">Give your docs<br>a <em>voice.</em></h2>
     <p class="reveal">Free, private, and fast. Install READ2ME and let your editor read to you.</p>
     <div class="cta-row reveal">
-      <a class="btn btn-primary" href="#install">
+      <a class="btn btn-primary" href="https://marketplace.visualstudio.com/items?itemName=ofirski.read2me" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
-        Get started
+        Install for VS Code
       </a>
       <a class="btn btn-ghost" href="https://github.com/ofirski/READ2ME" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5Z"/></svg>
@@ -582,10 +597,23 @@
 
 <footer>
   <div class="wrap foot-inner">
-    <span>READ2ME · Offline neural text-to-speech · Powered by <a href="https://github.com/OHF-Voice/piper1-gpl" target="_blank" rel="noopener">Piper</a></span>
+    <div class="built-by">
+      <span class="by">Built by <b>Ofir Kerker</b> <span class="handle">@ofirski</span></span>
+      <div class="social">
+        <a href="https://x.com/ofirski_" target="_blank" rel="noopener" aria-label="Ofir Kerker on X (Twitter)" title="X (Twitter)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/ofirski/" target="_blank" rel="noopener" aria-label="Ofir Kerker on LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.12 20.45H3.55V9h3.57v11.45ZM22.22 0H1.77C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0Z"/></svg>
+        </a>
+        <a href="https://github.com/ofirski" target="_blank" rel="noopener" aria-label="Ofir Kerker on GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5Z"/></svg>
+        </a>
+      </div>
+    </div>
     <div class="foot-links">
-      <a href="https://github.com/ofirski/READ2ME" target="_blank" rel="noopener">GitHub</a>
-      <a href="#features">Features</a>
+      <a href="https://github.com/ofirski/READ2ME" target="_blank" rel="noopener">Repo</a>
+      <a href="https://github.com/OHF-Voice/piper1-gpl" target="_blank" rel="noopener">Piper</a>
       <a href="#install">Install</a>
     </div>
   </div>
