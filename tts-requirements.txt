@@ -1,0 +1,10 @@
+# Offline neural TTS toolchain for read_md.py — installed into ./.tts-venv
+# Recreate with:  python3 -m venv .tts-venv && ./.tts-venv/bin/pip install -r tts-requirements.txt
+# Verified working on macOS (arm64) with Python 3.12.8.
+#
+# piper-tts pulls in onnxruntime + numpy automatically; the three below are the
+# packages we use directly. Exact transitive versions are captured in pip freeze
+# if you ever need a full lockfile.
+piper-tts==1.4.2
+markdown==3.10.2
+beautifulsoup4==4.14.3

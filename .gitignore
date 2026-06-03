@@ -1,0 +1,13 @@
+# Python virtualenv (recreate with: python3 -m venv .tts-venv && ./.tts-venv/bin/pip install -r tts-requirements.txt)
+.tts-venv/
+
+# Voice models — large binaries; fetch with ./fetch-voices.sh
+tts-voices/
+
+# Packaged extension build artifact
+tts-extension/*.vsix
+
+# Python / OS noise
+__pycache__/
+*.py[cod]
+.DS_Store

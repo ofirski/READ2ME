@@ -1,0 +1,28 @@
+// Keybindings for the Piper "Read MD aloud" tasks.
+//
+// IMPORTANT: VS Code / Cursor do NOT load keybindings from a workspace
+// .vscode/keybindings.json automatically — keybindings are a USER setting.
+// To activate these, open the Command Palette (Cmd+Shift+P) ->
+// "Preferences: Open Keyboard Shortcuts (JSON)" and paste the two entries
+// below into your user keybindings.json. (This file is kept here as the
+// canonical copy / source of truth for the project.)
+//
+//   Ctrl+Cmd+R  ->  Read the current Markdown file aloud
+//   Ctrl+Cmd+S  ->  Stop reading
+//
+// Uses Control + Command (both physically present on every Mac keyboard) to
+// avoid the Option/Alt key. Neither clashes with a default Cursor/VS Code or
+// macOS shortcut. NOTE: make sure the Markdown SOURCE editor is focused (not
+// the rendered preview, the Explorer, or the terminal) so ${file} resolves.
+[
+  {
+    "key": "ctrl+cmd+r",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Read MD aloud"
+  },
+  {
+    "key": "ctrl+cmd+s",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Stop reading"
+  }
+]

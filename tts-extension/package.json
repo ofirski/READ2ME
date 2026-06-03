@@ -1,0 +1,108 @@
+{
+  "name": "katalog-tts",
+  "displayName": "Katalog Read Aloud (Piper TTS)",
+  "description": "Read the active file aloud with offline Piper neural TTS, highlighting the current sentence and word, with play/pause/stop/speed controls and selectable voices.",
+  "version": "0.0.4",
+  "publisher": "katalog-local",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "katalogTts.play",
+        "title": "Katalog: Read aloud / resume"
+      },
+      {
+        "command": "katalogTts.pause",
+        "title": "Katalog: Pause reading"
+      },
+      {
+        "command": "katalogTts.stop",
+        "title": "Katalog: Stop reading"
+      },
+      {
+        "command": "katalogTts.speedUp",
+        "title": "Katalog: Read faster"
+      },
+      {
+        "command": "katalogTts.speedDown",
+        "title": "Katalog: Read slower"
+      },
+      {
+        "command": "katalogTts.speedReset",
+        "title": "Katalog: Reset reading speed to 1x"
+      },
+      {
+        "command": "katalogTts.selectVoice",
+        "title": "Katalog: Select voice"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "katalogTts.play",
+        "key": "ctrl+cmd+r"
+      },
+      {
+        "command": "katalogTts.pause",
+        "key": "ctrl+cmd+p"
+      },
+      {
+        "command": "katalogTts.stop",
+        "key": "ctrl+cmd+s"
+      }
+    ],
+    "configuration": {
+      "title": "Katalog TTS",
+      "properties": {
+        "katalogTts.pythonPath": {
+          "type": "string",
+          "default": ".tts-venv/bin/python",
+          "description": "Path to the Python interpreter (relative to the workspace folder, or absolute)."
+        },
+        "katalogTts.serverScript": {
+          "type": "string",
+          "default": "tts_server.py",
+          "description": "Path to tts_server.py (relative to the workspace folder, or absolute)."
+        },
+        "katalogTts.voicesDir": {
+          "type": "string",
+          "default": "tts-voices",
+          "description": "Folder scanned for .onnx voices (relative to the workspace folder, or absolute)."
+        },
+        "katalogTts.model": {
+          "type": "string",
+          "default": "tts-voices/en_US-lessac-high.onnx",
+          "description": "Default Piper .onnx voice model (used until a voice is picked via 'Katalog: Select voice')."
+        },
+        "katalogTts.config": {
+          "type": "string",
+          "default": "tts-voices/en_US-lessac-high.onnx.json",
+          "description": "Default Piper .onnx.json config matching the default model."
+        },
+        "katalogTts.rate": {
+          "type": "number",
+          "default": 1.0,
+          "description": "Base speech rate. 1.0 = natural; >1.0 = faster. The 2x button doubles this."
+        },
+        "katalogTts.wordHighlightColor": {
+          "type": "string",
+          "default": "rgba(255,56,92,0.35)",
+          "description": "Background color of the word currently being spoken."
+        },
+        "katalogTts.sentenceHighlightColor": {
+          "type": "string",
+          "default": "rgba(255,56,92,0.12)",
+          "description": "Background color of the sentence currently being spoken."
+        }
+      }
+    }
+  }
+}

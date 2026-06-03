@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Read MD aloud",
+      "type": "process",
+      "command": "${workspaceFolder}/.tts-venv/bin/python",
+      "args": [
+        "${workspaceFolder}/read_md.py",
+        "${file}"
+      ],
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Stop reading",
+      "type": "process",
+      "command": "${workspaceFolder}/stop_tts.sh",
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
