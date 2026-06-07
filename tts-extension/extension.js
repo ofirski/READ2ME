@@ -17,6 +17,92 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 
+// macOS / Linux only: spawn a one-shot player process.
+function spawnAudioPlayer(wavPath) {
+  if (process.platform === "darwin") return cp.spawn("afplay", [wavPath]);
+  return cp.spawn("aplay", [wavPath]);
+}
+
+// Kill any stray audio processes (macOS/Linux safety net — Windows handled via PersistentAudioPlayer).
+function killStrayPlayers() {
+  try {
+    if (process.platform === "darwin") cp.spawn("pkill", ["-x", "afplay"]);
+    else if (process.platform !== "win32") cp.spawn("pkill", ["-x", "aplay"]);
+  } catch (_) {}
+}
+
+// Windows: persistent PowerShell audio player.
+// Keeps one PS process alive across sentences to avoid the ~500ms per-sentence startup cost.
+// Signals "playing\n" on stdout right before PlaySync() starts so callers can begin
+// word-sweep timers at the exact moment audio begins.
+class PersistentAudioPlayer {
+  constructor() {
+    this._proc = null;
+    this._buf = "";
+    this._onPlaying = null;
+    this._onDone = null;
+  }
+
+  start() {
+    const script =
+      "$ErrorActionPreference='SilentlyContinue';" +
+      "while($true){" +
+        "$p=[Console]::ReadLine();" +
+        "if($null -eq $p){break};" +
+        "$p=$p.Trim();" +
+        "if($p -eq ''){continue};" +
+        "try{$sp=New-Object System.Media.SoundPlayer([string]$p);" +
+          "$sp.Load();" +
+          "[Console]::WriteLine('playing');[Console]::Out.Flush();" +
+          "$sp.PlaySync()}catch{};" +
+        "[Console]::WriteLine('done');[Console]::Out.Flush()" +
+      "}";
+    return new Promise((resolve, reject) => {
+      this._proc = cp.spawn("powershell", ["-NoProfile", "-NonInteractive", "-Command", script], {
+        stdio: ["pipe", "pipe", "ignore"],
+      });
+      this._proc.stdout.setEncoding("utf8");
+      this._proc.stdout.on("data", (d) => {
+        this._buf += d;
+        let idx;
+        while ((idx = this._buf.indexOf("\n")) >= 0) {
+          const line = this._buf.slice(0, idx).trim();
+          this._buf = this._buf.slice(idx + 1);
+          if (line === "playing") { const fn = this._onPlaying; this._onPlaying = null; if (fn) fn(); }
+          else if (line === "done") { const fn = this._onDone; this._onDone = null; if (fn) fn(); }
+        }
+      });
+      this._proc.on("exit", () => {
+        this._proc = null;
+        const pd = this._onDone; this._onDone = null; if (pd) pd();
+        const pp = this._onPlaying; this._onPlaying = null; if (pp) pp();
+      });
+      this._proc.on("spawn", resolve);
+      this._proc.on("error", (e) => { this._proc = null; reject(e); });
+    });
+  }
+
+  // Sends wavPath to the persistent process. Calls onStarted() when audio begins,
+  // onDone() when it ends. Returns false if process isn't running (caller falls back).
+  play(wavPath, onStarted, onDone) {
+    if (!this._proc || this._proc.killed) return false;
+    this._onPlaying = onStarted;
+    this._onDone = onDone;
+    this._proc.stdin.write(wavPath + "\n");
+    return true;
+  }
+
+  get proc() { return this._proc; }
+
+  dispose() {
+    const p = this._proc;
+    this._proc = null;
+    const pd = this._onDone; this._onDone = null; if (pd) pd();
+    const pp = this._onPlaying; this._onPlaying = null; if (pp) pp();
+    if (p) { try { p.stdin.end(); } catch (_) {} try { p.kill("SIGTERM"); } catch (_) {} }
+  }
+}
+
 let wordDeco = null;
 let sentDeco = null;
 // Status-bar transport buttons.
@@ -482,9 +568,25 @@ function playOne(seg, synthRes) {
     const cur = pb;
     if (!pb || pb.status !== "playing") return resolve();
 
+    // Sentence highlight + scroll immediately for visual feedback before audio starts.
     if (pb.editor) {
       pb.editor.setDecorations(sentDeco, [seg.range]);
       pb.editor.revealRange(seg.range, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
+    }
+
+    let resolved = false;
+    const done = () => {
+      if (resolved) return;
+      resolved = true;
+      if (pb === cur) { pb.afplay = null; clearTimers(cur); }
+      resolve();
+    };
+
+    // Word-sweep timers start only when audio has actually begun playing.
+    // This prevents the sweep from running ahead of audio on platforms with
+    // high player-process startup latency (e.g. PowerShell on Windows).
+    const startWordTimers = () => {
+      if (!pb || pb !== cur || pb.status !== "playing" || !pb.editor) return;
       const total = seg.tokens.reduce((a, t) => a + t.weight, 0) || 1;
       let acc = 0;
       for (const tok of seg.tokens) {
@@ -495,17 +597,21 @@ function playOne(seg, synthRes) {
         pb.timers.push(timer);
         acc += tok.weight;
       }
+    };
+
+    // Windows: use the persistent player — onStarted fires right before PlaySync().
+    if (process.platform === "win32" && pb.audioPlayer) {
+      const ok = pb.audioPlayer.play(synthRes.out, startWordTimers, done);
+      if (ok) {
+        pb.afplay = pb.audioPlayer.proc;
+        return;
+      }
     }
 
-    const af = cp.spawn("afplay", [synthRes.out]);
+    // macOS / Linux (and Windows fallback if persistent player died).
+    const af = spawnAudioPlayer(synthRes.out);
     pb.afplay = af;
-    const done = () => {
-      if (pb === cur) {
-        pb.afplay = null;
-        clearTimers(cur);
-      }
-      resolve();
-    };
+    af.on("spawn", startWordTimers); // 'spawn' fires when process is running — near-instant on macOS
     af.on("exit", done);
     af.on("error", done);
   });
@@ -596,8 +702,10 @@ async function startFresh(opts) {
   if (opts.index != null) startIndex = Math.max(0, Math.min(opts.index, segments.length - 1));
 
   const server = new SynthServer(Object.assign({}, paths, { model: voice.model, config: voice.config }));
+  const audioPlayer = process.platform === "win32" ? new PersistentAudioPlayer() : null;
   pb = {
     server,
+    audioPlayer,
     editor: target.editor,
     doc: target.doc,
     segments,
@@ -610,6 +718,9 @@ async function startFresh(opts) {
     restart: false,
   };
   const cur = pb;
+
+  // Start synth server and audio player in parallel so both are warm before the first sentence.
+  if (audioPlayer) audioPlayer.start().catch(() => { if (pb === cur) pb.audioPlayer = null; });
 
   try {
     await server.start();
@@ -630,6 +741,12 @@ function doPlay() {
   if (pb && pb.status === "playing") return; // already playing
   if (pb && pb.status === "paused") {
     pb.status = "playing";
+    // Restart the Windows audio player (disposed on pause).
+    if (process.platform === "win32" && !pb.audioPlayer) {
+      const audioPlayer = new PersistentAudioPlayer();
+      pb.audioPlayer = audioPlayer;
+      audioPlayer.start().catch(() => { pb.audioPlayer = null; });
+    }
     updateButtons();
     runLoop();
     return;
@@ -641,10 +758,12 @@ function doPause() {
   if (!pb || pb.status !== "playing") return;
   pb.status = "paused"; // runLoop will return without advancing the index
   clearTimers(pb);
-  if (pb.afplay) {
-    try {
-      pb.afplay.kill("SIGTERM");
-    } catch (_) {}
+  if (pb.audioPlayer) {
+    pb.audioPlayer.dispose(); // kills PS process; restarted on resume
+    pb.audioPlayer = null;
+    pb.afplay = null;
+  } else if (pb.afplay) {
+    try { pb.afplay.kill("SIGTERM"); } catch (_) {}
     pb.afplay = null;
   }
   if (pb.editor) {
@@ -661,19 +780,16 @@ function doStop() {
   if (s) {
     s.status = "stopped";
     clearTimers(s);
-    if (s.afplay) {
-      try {
-        s.afplay.kill("SIGTERM");
-      } catch (_) {}
+    if (s.audioPlayer) {
+      s.audioPlayer.dispose();
+    } else if (s.afplay) {
+      try { s.afplay.kill("SIGTERM"); } catch (_) {}
     }
     if (s.prefetch) s.prefetch.promise.then((r) => tryUnlink(r.out)).catch(() => {});
     if (s.server) s.server.dispose();
     clearDecorations(s.editor);
   }
-  // Safety net for any stray afplay this extension spawned.
-  try {
-    cp.spawn("pkill", ["-x", "afplay"]);
-  } catch (_) {}
+  killStrayPlayers();
   updateButtons();
 }
 
