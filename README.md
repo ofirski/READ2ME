@@ -14,6 +14,7 @@ to use it:
 
 ## Quick start (after cloning)
 
+**macOS / Linux:**
 ```bash
 # 1. Python env
 python3 -m venv .tts-venv
@@ -27,6 +28,24 @@ cd tts-extension
 npx --yes @vscode/vsce package --no-dependencies --allow-missing-repository
 /Applications/Cursor.app/Contents/Resources/app/bin/cursor --install-extension read2me-*.vsix
 ```
+
+**Windows (PowerShell):**
+```powershell
+# 1. Python env
+python -m venv .tts-venv
+.\.tts-venv\Scripts\pip install -r tts-requirements.txt
+
+# 2. Voice models — requires Git Bash
+& "C:\Program Files\Git\bin\bash.exe" ".\fetch-voices.sh"
+
+# 3. Build + install the VS Code extension
+cd tts-extension
+npx --yes @vscode/vsce package --no-dependencies --allow-missing-repository
+code --install-extension (Get-Item read2me-*.vsix).Name
+```
+
+Then set `read2me.pythonPath` in VS Code Settings to the absolute path of
+`.tts-venv\Scripts\python.exe` (e.g. `C:\path\to\READ2ME\.tts-venv\Scripts\python.exe`).
 
 The extension finds this project via absolute paths in your **Cursor user settings**
 (`read2me.pythonPath`, `read2me.serverScript`, `read2me.voicesDir`,
