@@ -37,6 +37,7 @@ installs natively in VS Code and in Cursor / VSCodium / Windsurf alike:
 
 **2. Set up the offline voice backend** (one time):
 
+**macOS / Linux:**
 ```bash
 git clone https://github.com/ofirski/READ2ME.git
 cd READ2ME
@@ -49,11 +50,26 @@ python3 -m venv .tts-venv
 ./fetch-voices.sh
 ```
 
+**Windows (PowerShell):**
+```powershell
+git clone https://github.com/ofirski/READ2ME.git
+cd READ2ME
+
+# Python env + dependencies
+python -m venv .tts-venv
+.\.tts-venv\Scripts\pip install -r tts-requirements.txt
+
+# Download the neural voices (~109 MB each) — requires Git Bash
+& "C:\Program Files\Git\bin\bash.exe" ".\fetch-voices.sh"
+```
+
 Then point the extension at these files via **Settings → READ2ME** (`read2me.*`).
 Absolute paths work, so reading aloud works from any workspace once configured.
 
-Verified on macOS (Apple Silicon), Python 3.12, `piper-tts` 1.4.2. Playback uses
-the macOS `afplay` command.
+On Windows, set `read2me.pythonPath` to the absolute path of `.tts-venv\Scripts\python.exe`
+(e.g. `C:\path\to\READ2ME\.tts-venv\Scripts\python.exe`).
+
+Verified on macOS (Apple Silicon) and Windows 11, Python 3.12+, `piper-tts` 1.4.2.
 
 ## Controls
 
