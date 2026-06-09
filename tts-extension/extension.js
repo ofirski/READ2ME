@@ -17,9 +17,16 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 
-// macOS / Linux only: spawn a one-shot player process.
+// One-shot player process — used on macOS/Linux and as a Windows fallback when
+// the persistent player is unavailable (e.g. between restart and ready).
 function spawnAudioPlayer(wavPath) {
   if (process.platform === "darwin") return cp.spawn("afplay", [wavPath]);
+  if (process.platform === "win32") {
+    return cp.spawn("powershell", [
+      "-NoProfile", "-NonInteractive", "-Command",
+      `(New-Object System.Media.SoundPlayer([string]'${wavPath.replace(/'/g, "''")}')).PlaySync()`,
+    ]);
+  }
   return cp.spawn("aplay", [wavPath]);
 }
 
@@ -507,10 +514,14 @@ function setSpeed(mul) {
     discardPrefetch();
     pb.restart = true;
     clearTimers(pb);
-    if (pb.afplay) {
-      try {
-        pb.afplay.kill("SIGTERM");
-      } catch (_) {}
+    if (process.platform === "win32" && pb.audioPlayer) {
+      pb.audioPlayer.dispose();
+      const ap = new PersistentAudioPlayer();
+      pb.audioPlayer = ap;
+      ap.start().catch(() => { if (pb && pb.audioPlayer === ap) pb.audioPlayer = null; });
+      pb.afplay = null;
+    } else if (pb.afplay) {
+      try { pb.afplay.kill("SIGTERM"); } catch (_) {}
       pb.afplay = null;
     }
   }
@@ -608,7 +619,7 @@ function playOne(seg, synthRes) {
       }
     }
 
-    // macOS / Linux (and Windows fallback if persistent player died).
+    // macOS / Linux, or Windows one-shot fallback if persistent player isn't ready yet.
     const af = spawnAudioPlayer(synthRes.out);
     pb.afplay = af;
     af.on("spawn", startWordTimers); // 'spawn' fires when process is running — near-instant on macOS
