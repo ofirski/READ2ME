@@ -2,7 +2,7 @@
   "name": "read2me",
   "displayName": "READ2ME",
   "description": "Read the active file aloud with offline Piper neural TTS — highlights the current sentence and word, with play/pause/stop, a speed stepper, and selectable voices.",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "publisher": "ofirski",
   "author": {
     "name": "Ofir Kerker",
