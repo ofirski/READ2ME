@@ -10,7 +10,7 @@
         "${file}"
       ],
       "presentation": {
-        "echo": false,
+        "echo": true,
         "reveal": "silent",
         "focus": false,
         "panel": "dedicated",
